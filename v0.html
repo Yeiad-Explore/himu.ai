@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>himu.ai - Generative AI Solutions</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary-color: #00f7ff;
+            --primary-glow: 0 0 15px rgba(0, 247, 255, 0.7);
+            --secondary-color: #ff00e5;
+            --secondary-glow: 0 0 15px rgba(255, 0, 229, 0.7);
+            --accent-color: #7000ff;
+            --dark-color: #0a0a14;
+            --darker-color: #050510;
+            --light-color: #f8fafc;
+            --gray-color: #a0a0b0;
+            --gray-light: #2a2a3a;
+            --border-radius: 8px;
+            --box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            --neon-shadow: 0 0 10px rgba(0, 247, 255, 0.5), 0 0 20px rgba(0, 247, 255, 0.3), 0 0 30px rgba(0, 247, 255, 0.1);
+            --neon-shadow-purple: 0 0 10px rgba(112, 0, 255, 0.5), 0 0 20px rgba(112, 0, 255, 0.3), 0 0 30px rgba(112, 0, 255, 0.1);
+            --neon-shadow-pink: 0 0 10px rgba(255, 0, 229, 0.5), 0 0 20px rgba(255, 0, 229, 0.3), 0 0 30px rgba(255, 0, 229, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--light-color);
+            background-color: var(--dark-color);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(112, 0, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 247, 255, 0.15) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+
+        .section-header h2 span {
+            color: var(--primary-color);
+            text-shadow: var(--neon-shadow);
+        }
+
+        .section-header p {
+            color: var(--gray-color);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            letter-spacing: 0.5px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn.primary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid var(--primary-color);
+            box-shadow: var(--neon-shadow);
+        }
+
+        .btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--neon-shadow), 0 10px 20px -10px rgba(0, 247, 255, 0.6);
+        }
+
+        .btn.primary:hover::before {
+            opacity: 0.8;
+        }
+
+        .btn.secondary {
+            background-color: transparent;
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+            box-shadow: var(--neon-shadow-pink);
+        }
+
+        .btn.secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--neon-shadow-pink), 0 10px 20px -10px rgba(255, 0, 229, 0.6);
+            color: white;
+        }
+
+        .btn.secondary:hover::before {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            opacity: 0.8;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(10, 10, 20, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+        }
+
+        nav {
+            padding: 15px 0;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+            text-shadow: var(--neon-shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+            box-shadow: var(--neon-shadow);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 30px;
+            height: 2px;
+            background-color: var(--light-color);
+            transition: all 0.3s ease;
+        }
+
+        .hamburger:hover span {
+            background-color: var(--primary-color);
+            box-shadow: var(--neon-shadow);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            background: var(--darker-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI3NjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBmaWxsPSIjMDUwNTEwIiBkPSJNMCAwaDEyMDB2NjAwSDB6Ii8+PHBhdGggZD0iTTAgMGw4MDAgNjAwTDAgNjAwVjB6IiBmaWxsPSIjMGEwYTE0Ii8+PC9nPjwvc3ZnPg==');
+            background-size: cover;
+            opacity: 0.6;
+            z-index: -1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(112, 0, 255, 0.4) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(0, 247, 255, 0.4) 0%, transparent 30%);
+            z-index: -1;
+        }
+
+        .hero .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-content h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            color: var(--light-color);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .hero-content h1 span {
+            color: var(--primary-color);
+            text-shadow: var(--neon-shadow);
+            display: block;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--gray-color);
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ai-animation {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        .circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0, 247, 255, 0.2), rgba(112, 0, 255, 0.2));
+            box-shadow: 
+                inset 0 0 30px rgba(0, 247, 255, 0.5),
+                0 0 30px rgba(0, 247, 255, 0.5);
+            border: 2px solid rgba(0, 247, 255, 0.3);
+        }
+
+        .pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 247, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+                border-color: rgba(0, 247, 255, 0.3);
+            }
+            50% {
+                border-color: rgba(112, 0, 255, 0.3);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.8);
+                opacity: 0;
+                border-color: rgba(255, 0, 229, 0.3);
+            }
+        }
+
+        /* About Section */
+        .about {
+            background-color: var(--darker-color);
+            position: relative;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            box-shadow: var(--neon-shadow);
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            gap: 70px;
+        }
+
+        .about-text {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--gray-color);
+            line-height: 1.8;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 40px 30px;
+            background-color: rgba(10, 10, 20, 0.5);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            flex: 1;
+            min-width: 250px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 247, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--box-shadow), var(--neon-shadow);
+            border-color: rgba(0, 247, 255, 0.3);
+        }
+
+        .stat-item h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            font-family: 'Outfit', sans-serif;
+            text-shadow: var(--neon-shadow);
+        }
+
+        .stat-item p {
+            color: var(--gray-color);
+            font-size: 1.05rem;
+        }
+
+        /* Products Section */
+        .products {
+            background-color: var(--dark-color);
+            position: relative;
+        }
+
+        .products::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            box-shadow: var(--neon-shadow-purple);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .product-card {
+            background-color: rgba(10, 10, 20, 0.5);
+            border-radius: var(--border-radius);
+            padding: 40px 30px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0, 247, 255, 0.1);
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 247, 255, 0.1), rgba(112, 0, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--box-shadow), 0 0 20px rgba(0, 247, 255, 0.3);
+            border-color: rgba(0, 247, 255, 0.3);
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-icon {
+            margin-bottom: 25px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: rgba(0, 247, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover .product-icon {
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.4);
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 0 5px rgba(0, 247, 255, 0.5));
+        }
+
+        .chat-icon {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBmN2ZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci1tZXNzYWdlLWNpcmNsZSI+PHBhdGggZD0iTTIxIDExLjVhOC4zOCA4LjM4IDAgMCAxLS45IDMuOCA4LjUgOC41IDAgMCAxLTcuNiA0LjcgOC4zOCA4LjM4IDAgMCAxLTMuOC0uOUwzIDIxbDEuOS01LjdhOC4zOCA4LjM4IDAgMCAxLS45LTMuOCA4LjUgOC41IDAgMCAxIDQuNy03LjYgOC4zOCA4LjM4IDAgMCAxIDMuOC0uOWguNWE4LjQ4IDguNDggMCAwIDEgOCA4di41eiI+PC9wYXRoPjwvc3ZnPg==');
+        }
+
+        .agent-icon {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBmN2ZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci11c2VyIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+');
+        }
+
+        .voice-icon {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBmN2ZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci1taWMiPjxwYXRoIGQ9Ik0xMiAxYTMgMyAwIDAgMC0zIDN2OGEzIDMgMCAwIDAgNiAwVjRhMyAzIDAgMCAwLTMtM3oiPjwvcGF0aD48cGF0aCBkPSJNMTkgMTB2MmE3IDcgMCAwIDEtMTQgMHYtMiI+PC9wYXRoPjxsaW5lIHgxPSIxMiIgeTE9IjE5IiB4Mj0iMTIiIHkyPSIyMyI+PC9saW5lPjxsaW5lIHgxPSI4IiB5MT0iMjMiIHgyPSIxNiIgeTI9IjIzIj48L2xpbmU+PC9zdmc+');
+        }
+
+        .api-icon {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBmN2ZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci1jb2RlIj48cG9seWxpbmUgcG9pbnRzPSIxNiAxOCAyMiAxMiAxNiA2Ij48L3BvbHlsaW5lPjxwb2x5bGluZSBwb2ludHM9IjggNiAyIDEyIDggMTgiPjwvcG9seWxpbmU+PC9zdmc+');
+        }
+
+        .product-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: var(--light-color);
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .product-card p {
+            color: var(--gray-color);
+            margin-bottom: 25px;
+            flex-grow: 1;
+            line-height: 1.7;
+        }
+
+        .learn-more {
+            color: var(--primary-color);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            text-shadow: var(--neon-shadow);
+        }
+
+        .learn-more:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .learn-more::after {
+            content: '→';
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .learn-more:hover::after {
+            transform: translateX(5px);
+        }
+
+        /* Demo Section */
+        .demo {
+            background-color: var(--darker-color);
+            position: relative;
+        }
+
+        .demo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+            box-shadow: var(--neon-shadow-pink);
+        }
+
+        .chatbot-demo {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .chat-container {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow), 0 0 20px rgba(0, 247, 255, 0.2);
+            background-color: rgba(10, 10, 20, 0.5);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .chat-header {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 18px 20px;
+            box-shadow: 0 2px 10px rgba(0, 247, 255, 0.3);
+        }
+
+        .chat-header h3 {
+            font-size: 1.3rem;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .chat-messages {
+            height: 350px;
+            overflow-y: auto;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: rgba(5, 5, 16, 0.7);
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message p {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 5px 15px rgba(255, 0, 229, 0.2);
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background: rgba(42, 42, 58, 0.8);
+            color: var(--light-color);
+            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 20px;
+            border-top: 1px solid rgba(0, 247, 255, 0.2);
+            background-color: rgba(10, 10, 20, 0.7);
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            outline: none;
+            background-color: rgba(5, 5, 16, 0.7);
+            color: var(--light-color);
+            transition: all 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+        }
+
+        .chat-input button {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0 25px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+        }
+
+        .chat-input button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+        }
+
+        .voice-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50% !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 !important;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+        }
+
+        .voice-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .mic-icon {
+            width: 22px;
+            height: 22px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItbWljIj48cGF0aCBkPSJNMTIgMWEzIDMgMCAwIDAtMyAzdjhhMyAzIDAgMCAwIDYgMFY0YTMgMyAwIDAgMC0zLTN6Ij48L3BhdGg+PHBhdGggZD0iTTE5IDEwdjJhNyA3IDAgMCAxLTE0IDB2LTIiPjwvcGF0aD48bGluZSB4MT0iMTIiIHkxPSIxOSIgeDI9IjEyIiB5Mj0iMjMiPjwvbGluZT48bGluZSB4MT0iOCIgeTE9IjIzIiB4Mj0iMTYiIHkyPSIyMyI+PC9saW5lPjwvc3ZnPg==');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: var(--dark-color);
+            position: relative;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            box-shadow: var(--neon-shadow);
+        }
+
+        .contact-content {
+            display: flex;
+            gap: 60px;
+        }
+
+        .contact-form {
+            flex: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--gray-color);
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: rgba(5, 5, 16, 0.7);
+            color: var(--light-color);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+        }
+
+        .contact-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .info-item {
+            padding: 20px;
+            background-color: rgba(10, 10, 20, 0.5);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0, 247, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            border-color: rgba(0, 247, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.2);
+        }
+
+        .info-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-family: 'Outfit', sans-serif;
+            text-shadow: var(--neon-shadow);
+        }
+
+        .info-item p {
+            color: var(--gray-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: rgba(10, 10, 20, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 247, 255, 0.1);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+        }
+
+        .facebook {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBmN2ZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci1mYWNlYm9vayI+PHBhdGggZD0iTTE4IDJoLTNhNSA1IDAgMCAwLTUgNXYzSDd2NGgzdjhoNHYtOGgzbDEtNGgtNFY3YTEgMSAwIDAgMSAxLTFoM3oiPjwvcGF0aD48L3N2Zz4=');
+            background-size: 22px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .twitter {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBmN2ZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci10d2l0dGVyIj48cGF0aCBkPSJNMjMgM2ExMC45IDEwLjkgMCAwIDEtMy4xNCAxLjUzIDQuNDggNC40OCAwIDAgMC03Ljg2IDN2MUExMC42NiAxMC42NiAwIDAgMSAzIDRzLTQgOSA1IDEzYTExLjY0IDExLjY0IDAgMCAxLTcgMmM5IDUgMjAgMCAyMC0xMS41YTQuNSA0LjUgMCAwIDAtLjA4LS44M0E3LjcyIDcuNzIgMCAwIDAgMjMgM3oiPjwvcGF0aD48L3N2Zz4=');
+            background-size: 22px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .linkedin {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBmN2ZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci1saW5rZWRpbiI+PHBhdGggZD0iTTE2IDhhNiA2IDAgMCAxIDYgNnY3aC00di03YTIgMiAwIDAgMC0yLTIgMiAyIDAgMCAwLTIgMnY3aC00di03YTYgNiAwIDAgMSA2LTZ6Ij48L3BhdGg+PHJlY3QgeD0iMiIgeT0iOSIgd2lkdGg9IjQiIGhlaWdodD0iMTIiPjwvcmVjdD48Y2lyY2xlIGN4PSI0IiBjeT0iNCIgcj0iMiI+PC9jaXJjbGU+PC9zdmc+');
+            background-size: 22px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .instagram {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBmN2ZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci1pbnN0YWdyYW0iPjxyZWN0IHg9IjIiIHk9IjIiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgcng9IjUiIHJ5PSI1Ij48L3JlY3Q+PHBhdGggZD0iTTE2IDExLjM3QTQgNCAwIDEgMSAxMi42MyA4IDQgNCAwIDAgMSAxNiAxMS4zN3oiPjwvcGF0aD48bGluZSB4MT0iMTcuNSIgeTE9IjYuNSIgeDI9IjE3LjUxIiB5Mj0iNi41Ij48L2xpbmU+PC9zdmc+');
+            background-size: 22px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--darker-color);
+            color: var(--light-color);
+            padding: 80px 0 30px;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            box-shadow: var(--neon-shadow-purple);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .footer-logo span {
+            color: var(--primary-color);
+            text-shadow: var(--neon-shadow);
+        }
+
+        .footer-logo p {
+            color: var(--gray-color);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 80px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: var(--light-color);
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-column ul {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-column a {
+            color: var(--gray-color);
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 3px 0;
+        }
+
+        .footer-column a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+            box-shadow: var(--neon-shadow);
+        }
+
+        .footer-column a:hover {
+            color: var(--primary-color);
+            text-shadow: var(--neon-shadow);
+        }
+
+        .footer-column a:hover::after {
+            width: 100%;
+        }
+
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid rgba(0, 247, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            color: var(--gray-color);
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-legal a {
+            color: var(--gray-color);
+            transition: all 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--primary-color);
+            text-shadow: var(--neon-shadow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-content h1 {
+                font-size: 3.2rem;
+            }
+
+            .contact-content {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 50px;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero .container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .about-text {
+                text-align: left;
+            }
+
+            .stats {
+                flex-direction: column;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            section {
+                padding: 80px 0;
+            }
+
+            .hero {
+                padding: 140px 0 80px;
+            }
+
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <div class="logo">
+                    <h1>himu<span>.ai</span></h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Smart AI Solutions <span>for Your Business</span></h1>
+                <p>We build intelligent solutions that transform how businesses operate and serve customers.</p>
+                <div class="hero-buttons">
+                    <a href="#products" class="btn primary">Explore Products</a>
+                    <a href="#contact" class="btn secondary">Get in Touch</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="ai-animation">
+                    <div class="pulse"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>About <span>himu.ai</span></h2>
+                <p>The next generation of IT solutions</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>We are a generative AI solution company - think of us as a traditional IT firm, but smarter. We build and offer intelligent solutions to both B2B and B2C clients, leveraging the power of artificial intelligence to solve complex problems.</p>
+                    <p>Our team specializes in creating custom AI solutions that are tailored to your specific needs, helping you stay ahead in today's competitive market.</p>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <h3>AI-Powered</h3>
+                        <p>Solutions built with cutting-edge AI technology</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>Customizable</h3>
+                        <p>Tailored to your specific business needs</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>Multilingual</h3>
+                        <p>Supporting Bangla and other languages</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="products">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our <span>Products</span></h2>
+                <p>Innovative AI solutions for modern businesses</p>
+            </div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-icon">
+                        <div class="icon chat-icon"></div>
+                    </div>
+                    <h3>Bangla AI Chatbot</h3>
+                    <p>A ChatGPT-like AI chatbot that operates in Bangla, offering both text and voice-based interactions for seamless communication.</p>
+                    <a href="#" class="learn-more">Learn More</a>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">
+                        <div class="icon agent-icon"></div>
+                    </div>
+                    <h3>Custom AI Agents</h3>
+                    <p>Full-fledged AI agents that can replace human customer service representatives, handling inquiries, solving problems, and more.</p>
+                    <a href="#" class="learn-more">Learn More</a>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">
+                        <div class="icon voice-icon"></div>
+                    </div>
+                    <h3>AI Voice Assistant</h3>
+                    <p>Intelligent voice assistants that understand context and provide natural, helpful responses to user queries.</p>
+                    <a href="#" class="learn-more">Learn More</a>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">
+                        <div class="icon api-icon"></div>
+                    </div>
+                    <h3>API Services</h3>
+                    <p>Access our powerful AI capabilities through our APIs, allowing you to integrate our technology into your own applications.</p>
+                    <a href="#" class="learn-more">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo">
+        <div class="container">
+            <div class="section-header">
+                <h2>Experience Our <span>AI</span></h2>
+                <p>Try our demo chatbot below</p>
+            </div>
+            <div class="chatbot-demo">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h3>himu.ai Assistant</h3>
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message bot">
+                            <p>Hello! I'm the himu.ai assistant. How can I help you today?</p>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="user-input" placeholder="Type your message here...">
+                        <button id="send-btn">Send</button>
+                        <button id="voice-btn" class="voice-btn">
+                            <div class="mic-icon"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get in <span>Touch</span></h2>
+                <p>Interested in our AI solutions? Contact us today!</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-form">
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn primary">Send Message</button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <div class="info-item">
+                        <h3>Email</h3>
+                        <p>info@himu.ai</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>Phone</h3>
+                        <p>+880 1234 567890</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>Address</h3>
+                        <p>Dhaka, Bangladesh</p>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" class="social-icon facebook"></a>
+                        <a href="#" class="social-icon twitter"></a>
+                        <a href="#" class="social-icon linkedin"></a>
+                        <a href="#" class="social-icon instagram"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>himu<span>.ai</span></h2>
+                    <p>Smart AI Solutions</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h3>Company</h3>
+                        <ul>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Products</h3>
+                        <ul>
+                            <li><a href="#products">AI Chatbot</a></li>
+                            <li><a href="#products">Custom AI Agents</a></li>
+                            <li><a href="#products">Voice Assistant</a></li>
+                            <li><a href="#products">API Services</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Support</h3>
+                        <ul>
+                            <li><a href="#contact">Contact Us</a></li>
+                            <li><a href="#">Documentation</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 himu.ai. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Navigation Toggle
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (hamburger) {
+                hamburger.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    
+                    if (navLinks.style.display === 'flex') {
+                        navLinks.style.display = 'none';
+                    } else {
+                        navLinks.style.display = 'flex';
+                        navLinks.style.flexDirection = 'column';
+                        navLinks.style.position = 'absolute';
+                        navLinks.style.top = '70px';
+                        navLinks.style.left = '0';
+                        navLinks.style.width = '100%';
+                        navLinks.style.backgroundColor = 'rgba(10, 10, 20, 0.95)';
+                        navLinks.style.padding = '20px';
+                        navLinks.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
+                        navLinks.style.zIndex = '1000';
+                        navLinks.style.backdropFilter = 'blur(10px)';
+                        navLinks.style.borderBottom = '1px solid rgba(0, 247, 255, 0.1)';
+                    }
+                });
+            }
+
+            // Smooth Scrolling for Anchor Links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Close mobile menu if open
+                        if (hamburger && hamburger.classList.contains('active')) {
+                            hamburger.click();
+                        }
+                    }
+                });
+            });
+
+            // Chatbot Demo Functionality
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const voiceBtn = document.getElementById('voice-btn');
+            
+            // Sample responses for the demo
+            const botResponses = {
+                "hello": "Hello! How can I assist you today?",
+                "hi": "Hi there! How can I help you?",
+                "how are you": "I'm doing well, thank you for asking! How can I assist you?",
+                "what is himu.ai": "himu.ai is a generative AI solution company that offers smart solutions to businesses and consumers, including Bangla AI chatbots, custom AI agents, voice assistants, and API services.",
+                "tell me about your products": "We offer several AI products  and API services.",
+                "tell me about your products": "We offer several AI products including: Bangla AI chatbot (text and voice-based), Custom AI agents for tasks like customer service, AI voice assistants, and API services for developers.",
+                "how does your chatbot work": "Our chatbot uses advanced natural language processing to understand and respond to queries in Bangla. It can handle both text and voice inputs, making it accessible to a wide range of users.",
+                "pricing": "Our pricing varies based on the specific solution and scale of implementation. Please contact our sales team for a customized quote.",
+                "contact": "You can reach us by filling out the contact form on our website, or by emailing us at info@himu.ai.",
+                "thank you": "You're welcome! Feel free to reach out if you have any other questions.",
+                "thanks": "You're welcome! Is there anything else I can help you with?"
+            };
+            
+            // Default fallback responses
+            const fallbackResponses = [
+                "I'm sorry, I don't have information on that yet. Would you like to speak with our team?",
+                "That's an interesting question. Our team would be happy to provide more details. Would you like to contact them?",
+                "I don't have the specific details for that query. Can I help you with something else about our AI solutions?",
+                "I'm still learning about that. In the meantime, can I tell you about our AI products and services?"
+            ];
+            
+            function addMessage(text, isUser) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user' : 'bot');
+                
+                const messagePara = document.createElement('p');
+                messagePara.textContent = text;
+                
+                messageDiv.appendChild(messagePara);
+                chatMessages.appendChild(messageDiv);
+                
+                // Scroll to the bottom of the chat
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            function getBotResponse(userMessage) {
+                // Convert to lowercase for easier matching
+                const message = userMessage.toLowerCase().trim();
+                
+                // Check for exact matches
+                for (const key in botResponses) {
+                    if (message.includes(key)) {
+                        return botResponses[key];
+                    }
+                }
+                
+                // Return a random fallback response
+                return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+            }
+            
+            function handleUserInput() {
+                const message = userInput.value.trim();
+                if (message === '') return;
+                
+                // Add user message to chat
+                addMessage(message, true);
+                
+                // Clear input field
+                userInput.value = '';
+                
+                // Simulate typing delay
+                setTimeout(() => {
+                    const botResponse = getBotResponse(message);
+                    addMessage(botResponse, false);
+                }, 1000);
+            }
+            
+            if (sendBtn) {
+                sendBtn.addEventListener('click', handleUserInput);
+            }
+            
+            if (userInput) {
+                userInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleUserInput();
+                    }
+                });
+            }
+            
+            // Voice input functionality (simplified demo)
+            if (voiceBtn) {
+                voiceBtn.addEventListener('click', function() {
+                    // In a real implementation, this would use the Web Speech API
+                    // For this demo, we'll just simulate voice input
+                    addMessage("Listening...", false);
+                    
+                    setTimeout(() => {
+                        const simulatedVoiceInput = "Tell me about your products";
+                        addMessage(simulatedVoiceInput, true);
+                        
+                        setTimeout(() => {
+                            const botResponse = getBotResponse(simulatedVoiceInput);
+                            addMessage(botResponse, false);
+                        }, 1000);
+                    }, 2000);
+                });
+            }
+
+            // Form submission
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // In a real implementation, this would send the form data to a server
+                    // For this demo, we'll just show a success message
+                    const formData = new FormData(contactForm);
+                    const formValues = {};
+                    
+                    formData.forEach((value, key) => {
+                        formValues[key] = value;
+                    });
+                    
+                    // Simulate form submission
+                    const submitBtn = contactForm.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    
+                    submitBtn.textContent = 'Sending...';
+                    submitBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        alert('Thank you for your message! We will get back to you soon.');
+                        contactForm.reset();
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }, 1500);
+                });
+            }
+
+            // Animation on scroll
+            function animateOnScroll() {
+                const elements = document.querySelectorAll('.product-card, .stat-item');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            }
+            
+            // Set initial state for animation
+            document.querySelectorAll('.product-card, .stat-item').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+            
+            // Run animation on load and scroll
+            window.addEventListener('load', animateOnScroll);
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+</body>
+</html>
